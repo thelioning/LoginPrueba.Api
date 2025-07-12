@@ -14,6 +14,7 @@ builder.Services.AddDbContext<LoginDbContext>(options =>
 
 var app = builder.Build();
 
+// Endpoint para recuperación de contraseña
 app.MapPost("/api/recuperar", async (LoginDbContext db, RecuperarClaveRequest req) =>
 {
     if (string.IsNullOrWhiteSpace(req.Correo))
@@ -23,7 +24,6 @@ app.MapPost("/api/recuperar", async (LoginDbContext db, RecuperarClaveRequest re
     if (usuario == null)
         return Results.BadRequest(new { error = "El correo no está registrado." });
 
-    // Generar token
     var token = GenerarTokenSeguro();
     usuario.Token = token;
     usuario.TokenExpira = DateTime.UtcNow.AddHours(1);
@@ -31,7 +31,6 @@ app.MapPost("/api/recuperar", async (LoginDbContext db, RecuperarClaveRequest re
 
     var url = $"https://jolly-froyo-a0632f.netlify.app/cambiar.html?token={token}";
 
-    // Enviar correo
     var remitente = "theliondjprodutions@gmail.com";
     var clave = "xeqjlfvfjrkkcahc";
     var smtp = new SmtpClient("smtp.gmail.com")
@@ -65,12 +64,13 @@ app.MapPost("/api/recuperar", async (LoginDbContext db, RecuperarClaveRequest re
     }
 });
 
+// ✅ Aquí se usa CambiarClaveRequest, NO RecuperarClaveRequest
 app.MapPost("/api/cambiar-clave", async (LoginDbContext db, CambiarClaveRequest req) =>
 {
     if (string.IsNullOrWhiteSpace(req.Token) || string.IsNullOrWhiteSpace(req.NuevaClave))
         return Results.BadRequest(new { error = "Token y nueva clave son obligatorios." });
 
-    var usuario = await db.Usuario.FirstOrDefaultAsync(u => u.Token == req.Token && u.TokenExpira > DateTime.UtcNow);
+    var usuario = await db.Usuarios.FirstOrDefaultAsync(u => u.Token == req.Token && u.TokenExpira > DateTime.UtcNow);
     if (usuario == null)
         return Results.BadRequest(new { error = "Token inválido o expirado." });
 
@@ -82,7 +82,6 @@ app.MapPost("/api/cambiar-clave", async (LoginDbContext db, CambiarClaveRequest 
     return Results.Ok(new { message = "Contraseña actualizada correctamente." });
 });
 
-// Función generadora de token
 string GenerarTokenSeguro(int longitud = 64)
 {
     using var rng = RandomNumberGenerator.Create();
@@ -95,5 +94,6 @@ string GenerarTokenSeguro(int longitud = 64)
 }
 
 app.Run();
+
 
 
