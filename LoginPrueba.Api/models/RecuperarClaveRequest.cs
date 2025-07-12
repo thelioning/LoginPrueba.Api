@@ -2,10 +2,12 @@
 using System.Net.Mail;
 
 
+
 namespace LoginPrueba.Api.Models
 {
-    public class RecuperarClaveRequest
+    public class CambiarClaveRequest
     {
-        public string Correo { get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
+        public string NuevaClave { get; set; } = string.Empty;
     }
 }

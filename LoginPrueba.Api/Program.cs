@@ -19,7 +19,7 @@ app.MapPost("/api/recuperar", async (LoginDbContext db, RecuperarClaveRequest re
     if (string.IsNullOrWhiteSpace(req.Correo))
         return Results.BadRequest(new { error = "Debe ingresar un correo." });
 
-    var usuario = await db.Usuario.FirstOrDefaultAsync(u => u.Correo == req.Correo);
+    var usuario = await db.Usuarios.FirstOrDefaultAsync(u => u.Correo == req.Correo);
     if (usuario == null)
         return Results.BadRequest(new { error = "El correo no está registrado." });
 
