@@ -1,0 +1,35 @@
+# Archivos de compilación
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+
+# Archivos de usuario de VS
+*.user
+*.suo
+*.dbmdl
+*.config.user
+*.bak
+
+# Archivos de paquetes NuGet
+packages/
+
+# Archivos de test / coverage
+TestResults/
+*.coverage
+*.coveragexml
+
+# Otros
+_ReSharper*/
+*.ncrunch*
+*.localhistory
+*.orig
+*.tmp
+
+#nuevos
+*.sqlite
+*.vs/
+

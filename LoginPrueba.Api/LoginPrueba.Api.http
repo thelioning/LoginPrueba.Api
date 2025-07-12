@@ -1,0 +1,6 @@
+@LoginPrueba.Api_HostAddress = http://localhost:5144
+
+GET {{LoginPrueba.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
